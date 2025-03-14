@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панель</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+</head>
+<body style="display: none;">
+    <div id="app">
+        <header>
+            <div class="header-emoji">⚙️</div>
+            <h1>Админ Панель</h1>
+        </header>
+        
+        <div class="admin-page">
+            <div class="admin-tabs">
+                <button @click="currentTab = 'products'" :class="{'active-tab': currentTab === 'products'}">Управление товарами</button>
+                <button @click="currentTab = 'payment'" :class="{'active-tab': currentTab === 'payment'}">Настройки оплаты</button>
+                <button @click="currentTab = 'categories'" :class="{'active-tab': currentTab === 'categories'}">Управление категориями</button>
+            </div>
+            
+            <!-- Products Management Tab -->
+            <div v-if="currentTab === 'products'" class="admin-tab-content">
+                <h2>Управление товарами</h2>
+                
+                <div class="products-list">
+                    <div v-for="(product, index) in allProducts" :key="index" class="admin-product-card">
+                        <div class="product-header">
+                            <h3>{{ product.name }} {{ product.emoji }}</h3>
+                            <div class="product-actions">
+                                <button @click="editProduct(index)" class="admin-button edit">Редактировать</button>
+                                <button @click="deleteProduct(index)" class="admin-button delete">Удалить</button>
+                            </div>
+                        </div>
+                        <p><strong>Цена:</strong> ${{ product.price }}</p>
+                        <p><strong>Описание:</strong> {{ product.description }}</p>
+                        <p v-if="product.image"><strong>Изображение:</strong> {{ product.image }}</p>
+                    </div>
+                </div>
+                
+                <div class="add-product-section">
+                    <h3>{{ isEditing ? 'Редактировать товар' : 'Добавить новый товар' }}</h3>
+                    <div class="form-group">
+                        <label>Название</label>
+                        <input v-model="newProduct.name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Цена</label>
+                        <input v-model="newProduct.price" type="number">
+                    </div>
+                    <div class="form-group">
+                        <label>Эмодзи</label>
+                        <input v-model="newProduct.emoji" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Изображение</label>
+                        <input type="file" @change="handleImageUpload" accept="image/*">
+                        <div v-if="newProduct.image" class="image-preview">
+                            <img :src="newProduct.image" alt="Preview" style="max-width: 200px; margin-top: 10px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea v-model="newProduct.description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Категория</label>
+                        <select v-model="newProduct.category">
+                            <option v-for="cat in categories" :key="cat" :value="getCategoryValue(cat)">{{ cat }}</option>
+                        </select>
+                    </div>
+                    <div class="admin-buttons">
+                        <button v-if="isEditing" @click="cancelEdit" class="admin-button">Отменить</button>
+                        <button @click="saveProduct" class="admin-button save">{{ isEditing ? 'Сохранить изменения' : 'Добавить товар' }}</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Settings Tab -->
+            <div v-if="currentTab === 'payment'" class="admin-tab-content">
+                <h2>Настройки оплаты</h2>
+                <div class="form-group">
+                    <label>Название банка</label>
+                    <input v-model="paymentSettings.bankName" type="text">
+                </div>
+                <div class="form-group">
+                    <label>Номер карты</label>
+                    <input v-model="paymentSettings.cardNumber" type="text">
+                </div>
+                <div class="form-group">
+                    <label>Получатель</label>
+                    <input v-model="paymentSettings.recipient" type="text">
+                </div>
+                <button @click="savePaymentSettings" class="admin-button save">Сохранить настройки</button>
+            </div>
+            
+            <!-- Categories Management Tab -->
+            <div v-if="currentTab === 'categories'" class="admin-tab-content">
+                <h2>Управление категориями</h2>
+                <div class="categories-list">
+                    <div v-for="(category, index) in categories" :key="index" class="category-item">
+                        <span>{{ category }}</span>
+                        <button @click="deleteCategory(index)" class="admin-button delete">Удалить</button>
+                    </div>
+                </div>
+                <div class="add-category-section">
+                    <h3>Добавить новую категорию</h3>
+                    <div class="form-group">
+                        <label>Название категории</label>
+                        <input v-model="newCategory" type="text">
+                    </div>
+                    <button @click="addCategory" class="admin-button save">Добавить категорию</button>
+                </div>
+            </div>
+        </div>
+        <a href="index.html" class="cart-button-home">На главную</a>
+    </div>
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+</head>
+<body style="display: none;">
+    <div id="app">
+         <header>
+            <div class="header-emoji">💨</div>
+            <h1>Вейп Шоп</h1>
+        </header>
+
+        <!-- Payment Page -->
+        <div class="payment-page">
+            <h2>Детали оплаты</h2>
+            <div class="payment-info">
+                <p><strong>Банк:</strong> {{ paymentDetails.bankName }}</p>
+                <p><strong>Номер карты:</strong> {{ paymentDetails.cardNumber }}</p>
+                <p><strong>Получатель:</strong> {{ paymentDetails.recipient }}</p>
+            </div>
+            <p>Пожалуйста, совершите перевод на сумму {{ cartTotal }}₽ и прикрепите скриншот оплаты ниже.</p>
+            <div class="file-upload">
+                <label>Загрузить скриншот оплаты</label>
+                <input type="file" @change="handleScreenshot" accept="image/*">
+            </div>
+            <button class="back-button" @click="returnToShop">Назад к оформлению</button>
+            <button class="checkout-btn" @click="finishOrder">Завершить заказ</button>
+        </div>
+        <a href="index.html" class="cart-button-home">На главную</a>
+        <a href="admin.html" class="admin-button-nav">Админ панель</a>
+    </div>
+     <script type="module" src="main.js"></script>
+</body>
+</html>

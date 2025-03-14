@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+</head>
+<body style="display: none;">
+    <div id="app">
+        <header>
+            <div class="header-emoji">💨</div>
+            <h1>Вейп Шоп</h1>
+        </header>
+        <!-- Checkout Page -->
+        <div class="checkout-page">
+            <h2>Оформление заказа</h2>
+            <div class="cart-summary">
+                <h3>Ваш заказ</h3>
+                <div v-for="item in cart" :key="item.id" class="cart-item">
+                    <span>{{ item.name }}</span>
+                    <span>${{ item.price }}</span>
+                </div>
+                <div class="cart-item">
+                    <strong>Total: ${{ cartTotal }}</strong>
+                </div>
+            </div>
+            <h3>Информация о доставке</h3>
+            <div class="form-group">
+                <label>Имя</label>
+                <input v-model="userDetails.firstName" type="text" required>
+            </div>
+            <div class="form-group">
+                <label>Фамилия</label>
+                <input v-model="userDetails.lastName" type="text" required>
+            </div>
+            <div class="form-group">
+                <label>Номер телефона</label>
+                <input v-model="userDetails.phone" type="tel" required>
+            </div>
+            <div class="form-group">
+                <label>Адрес доставки</label>
+                <input v-model="userDetails.address" type="text" required>
+            </div>
+            <button class="back-button" @click="returnToShop">Вернуться в магазин</button>
+            <button class="checkout-btn" @click="proceedToPayment">Перейти к оплате</button>
+        </div>
+        <a href="index.html" class="cart-button-home">На главную</a>
+        <a href="admin.html" class="admin-button-nav">Админ панель</a>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

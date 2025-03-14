@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устройства</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+    }
+    </script>
+</head>
+<body style="display: none;">
+    <div id="app">
+        <header>
+            <div class="header-emoji">💨</div>
+            <h1>Вейп Шоп</h1>
+        </header>
+        
+        <!-- Devices Page -->
+        <div class="shop-page">
+            <nav class="categories">
+                <a v-for="category in categories" 
+                   :key="category" 
+                   :href="getCategoryLink(category)"
+                   class="category">
+                    {{ category }}
+                </a>
+            </nav>
+
+            <main class="products-grid">
+                <div v-for="product in products" :key="product.id" class="product-card">
+                    <div class="product-image" @click="showDescription(product)">
+                        <div class="product-emoji">{{ product.emoji }}</div>
+                        <svg :style="{ fill: product.color }" viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="4"/>
+                        </svg>
+                    </div>
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">${{ product.price }}</p>
+                    <button @click="addToCart(product)" class="buy-button">Add to Cart</button>
+                </div>
+            </main>
+
+            <button class="cart-button" @click="showCart">
+                🛒 Корзина ({{ cartCount }})
+            </button>
+
+            <div v-if="showCartDropdown" class="cart-dropdown">
+                <h3>Корзина</h3>
+                <div v-if="cart.length === 0">Корзина пуста</div>
+                <div v-else>
+                    <div v-for="(item, index) in cart" :key="index" class="cart-item">
+                        <span>{{ item.name }}</span>
+                        <span>${{ item.price }}</span>
+                        <button @click="removeFromCart(index)">×</button>
+                    </div>
+                    <div class="cart-item">
+                        <strong>Total:</strong>
+                        <strong>${{ cartTotal }}</strong>
+                    </div>
+                    <button class="checkout-btn" @click="proceedToCheckout">Перейти к оформлению</button>
+                </div>
+            </div>
+
+            <div v-if="selectedProduct" class="modal">
+                <div class="modal-content">
+                    <h2>{{ selectedProduct.name }} {{ selectedProduct.emoji }}</h2>
+                    <p>{{ selectedProduct.description }}</p>
+                    <button @click="selectedProduct = null">Close</button>
+                </div>
+            </div>
+        </div>
+        <a href="index.html" class="cart-button-home">На главную</a>
+        <a href="admin.html" class="admin-button-nav">Админ панель</a>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
